@@ -70,6 +70,11 @@ func take_damage(amount: int) -> void:
 		die()
 
 func die() -> void:
+	var players = get_tree().get_nodes_in_group("player")
+	for player in players:
+		if player.has_method("add_exp"):
+			var exp_val = stats.exp_reward if stats else 10
+			player.add_exp(exp_val)
 	queue_free()
 
 func _on_screen_exited() -> void:

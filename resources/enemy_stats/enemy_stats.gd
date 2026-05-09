@@ -4,3 +4,4 @@ class_name EnemyStats extends Resource
 @export var max_health: int = 50
 @export var damage: int = 15
 @export var speed: float = 150.0
+@export var exp_reward: int = 10

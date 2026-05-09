@@ -20,6 +20,10 @@ var health: int = 100
 var max_health: int = 100
 var invulnerable_timer: float = 0.0
 
+var current_exp: int = 0
+var level: int = 1
+var exp_to_next_level: int = 100
+
 func _ready():
 	# Programmatically create RayCasts for wall detection so we don't
 	# need to edit the .tscn file directly.
@@ -61,6 +65,20 @@ func _physics_process(delta):
 			process_climbing(delta)
 
 signal health_changed(new_health)
+signal exp_changed(new_exp)
+signal level_up(new_level)
+
+func add_exp(amount: int):
+	current_exp += amount
+	
+	while current_exp >= exp_to_next_level:
+		current_exp -= exp_to_next_level
+		level += 1
+		emit_signal("level_up", level)
+		print("Level Up! New Level: ", level)
+		
+	print("Kaiju EXP: ", current_exp)
+	emit_signal("exp_changed", current_exp)
 
 func take_damage(amount: int):
 	if invulnerable_timer > 0:

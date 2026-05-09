@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://cqkp8rxqc7tyk"]
 
-[ext_resource type="Script" uid="uid://bcpctlv0486j6" path="res://entities/kaiju/enemy.gd" id="1_p0ajm"]
+[ext_resource type="Script" uid="uid://b86u6fhw5iq8p" path="res://entities/kaiju/tupis.gd" id="1_w00xq"]
 [ext_resource type="Resource" uid="uid://wonodivn6fmj" path="res://resources/enemy_stats/tupis_stats.tres" id="2_vg2e6"]
 [ext_resource type="Texture2D" uid="uid://cth2axexexbhq" path="res://sprites/kaiju/Tupis_First_Attempt_32x32.png" id="3_r3cpb"]
 
@@ -33,7 +33,7 @@ size = Vector2(20, 23)
 
 [node name="Tupis" type="CharacterBody2D"]
 collision_layer = 8
-script = ExtResource("1_p0ajm")
+script = ExtResource("1_w00xq")
 stats = ExtResource("2_vg2e6")
 
 [node name="Sprite2D" type="AnimatedSprite2D" parent="."]

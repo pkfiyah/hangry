@@ -3,21 +3,23 @@ extends Node2D
 const CHUNK_WIDTH = 640.0
 const SPAWN_RADIUS = 3 # How many chunks to keep visible around the player
 
-var chunk_scene = preload("res://entities/chunk.tscn")
+var chunk_scene = preload("uid://bgjxwxruwafd2")
 var current_chunk_index = 0
 var active_chunks: Dictionary = {}
 
 var enemy_spawn_timer: float = 3.0
-var enemy_scene # Will be loaded dynamically if it exists
+var enemy_scenes: Array[PackedScene] = []
 
 @onready var kaiju = $Kaiju
 @onready var chunk_container = $ChunkContainer
 @onready var enemy_container = Node2D.new()
 
 func _ready():
-	# Try loading the enemy scene if it's been created
-	if ResourceLoader.exists("res://entities/kaijus/tupis.tscn"):
-		enemy_scene = load("res://entities/kaijus/tupis.tscn")
+	# Load available enemy scenes
+	if ResourceLoader.exists("uid://cqkp8rxqc7tyk"): # tupis
+		enemy_scenes.append(load("uid://cqkp8rxqc7tyk"))
+	if ResourceLoader.exists("uid://vt6l3144axrt"): # tacoza
+		enemy_scenes.append(load("uid://vt6l3144axrt"))
 		
 	# Container to hold spawned enemies
 	enemy_container.name = "EnemyContainer"
@@ -45,7 +47,7 @@ func _process(delta):
 		update_chunks(current_chunk_index)
 
 	# Handle enemy spawning
-	if enemy_scene:
+	if enemy_scenes.size() > 0:
 		enemy_spawn_timer -= delta
 		if enemy_spawn_timer <= 0.0:
 			spawn_enemy()
@@ -53,9 +55,10 @@ func _process(delta):
 
 func spawn_enemy():
 	print("Spawning?")
-	if not enemy_scene: return
+	if enemy_scenes.is_empty(): return
 	
-	var enemy = enemy_scene.instantiate()
+	var random_scene = enemy_scenes.pick_random()
+	var enemy = random_scene.instantiate()
 	# Spawn either far left (-1) or far right (1)
 	var spawn_dir = 1 if randf() > 0.5 else -1
 	# Spawn 800 pixels away from the player (off screen)

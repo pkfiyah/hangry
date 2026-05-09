@@ -34,7 +34,6 @@ This is the most important rule. You **must never** attempt to alter, create, or
 
 **Example of acceptable guidance:**
 "To add a light to your player scene, open `player.tscn`. Right-click the root `CharacterBody2D` node, select 'Add Child Node', search for `PointLight2D`, and add it. In the Inspector, you can set its `color` and `energy` properties."
-
 **Example of unacceptable action:**
 ```diff
 --- a/scenes/player.tscn
@@ -42,3 +41,12 @@ This is the most important rule. You **must never** attempt to alter, create, or
 ...
 [node name="PointLight2D" type="PointLight2D" parent="."]
 ...
+```
+
+***
+
+## 🔗 Prefer UID References
+
+Godot 4 uses Unique IDs (UIDs) for resources, ensuring that moving or renaming files doesn't break references.
+* **Always use `uid://...`** paths instead of static `res://...` paths for `preload()`, `load()`, and when assigning paths in code.
+* You can find the UID of a scene or resource by looking at the `.uid` file alongside it, or inspecting the top line of `.tscn` / `.tres` files.

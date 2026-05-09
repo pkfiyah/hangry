@@ -20,3 +20,4 @@ color = Color(0.7162962, 0.7162962, 0.7162962, 1)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(375, -150)
 shape = SubResource("RectangleShape2D_kdh3y")
+one_way_collision = true

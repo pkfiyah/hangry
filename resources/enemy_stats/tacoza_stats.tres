@@ -5,3 +5,6 @@
 [resource]
 script = ExtResource("1_ohnx5")
 enemy_name = "Tacoza"
+max_health = 20
+damage = 10
+exp_reward = 5

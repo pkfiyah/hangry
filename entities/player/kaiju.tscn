@@ -6,7 +6,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ofpyr"]
 size = Vector2(32, 64)
 
-[node name="Kaiju" type="CharacterBody2D"]
+[node name="Kaiju" type="CharacterBody2D" groups=["player"]]
 collision_layer = 2
 script = ExtResource("1_7jq6t")
 

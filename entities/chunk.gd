@@ -1,6 +1,6 @@
 extends Node2D
 
-var building_scene = preload("res://entities/building.tscn")
+var building_scene = preload("uid://dgb8vtqwrrfbi")
 
 func _ready():
 	# Randomize so each run is different
