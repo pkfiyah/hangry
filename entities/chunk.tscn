@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://bgjxwxruwafd2"]
+
+[ext_resource type="Script" uid="uid://7frorx5irm1q" path="res://entities/chunk.gd" id="1_kdh3y"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s1tef"]
+size = Vector2(640, 100)
+
+[node name="Chunk" type="Node2D"]
+script = ExtResource("1_kdh3y")
+
+[node name="Floor" type="StaticBody2D" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="Floor"]
+custom_minimum_size = Vector2(640, 100)
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0.4045111, 0.40451115, 0.4045111, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
+position = Vector2(320, 50)
+shape = SubResource("RectangleShape2D_s1tef")

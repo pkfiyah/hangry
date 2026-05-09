@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="EnemyStats" load_steps=2 format=3 uid="uid://wonodivn6fmj"]
+
+[ext_resource type="Script" uid="uid://bb4qa0tvwh311" path="res://resources/enemy_stats/enemy_stats.gd" id="1_f1hng"]
+
+[resource]
+script = ExtResource("1_f1hng")
+enemy_name = "Tupis"

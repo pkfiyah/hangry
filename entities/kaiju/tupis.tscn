@@ -1,0 +1,58 @@
+[gd_scene load_steps=9 format=3 uid="uid://cqkp8rxqc7tyk"]
+
+[ext_resource type="Script" uid="uid://bcpctlv0486j6" path="res://entities/kaiju/enemy.gd" id="1_p0ajm"]
+[ext_resource type="Resource" uid="uid://wonodivn6fmj" path="res://resources/enemy_stats/tupis_stats.tres" id="2_vg2e6"]
+[ext_resource type="Texture2D" uid="uid://cth2axexexbhq" path="res://sprites/kaiju/Tupis_First_Attempt_32x32.png" id="3_r3cpb"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uvc0s"]
+atlas = ExtResource("3_r3cpb")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x8e4v"]
+atlas = ExtResource("3_r3cpb")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rrp0o"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uvc0s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x8e4v")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b4nis"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pqhw6"]
+size = Vector2(20, 23)
+
+[node name="Tupis" type="CharacterBody2D"]
+collision_layer = 8
+script = ExtResource("1_p0ajm")
+stats = ExtResource("2_vg2e6")
+
+[node name="Sprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_rrp0o")
+autoplay = "default"
+
+[node name="Hitbox" type="Area2D" parent="."]
+scale = Vector2(2, 2)
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource("RectangleShape2D_b4nis")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 1.5)
+scale = Vector2(2, 2)
+shape = SubResource("RectangleShape2D_pqhw6")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+rect = Rect2(-250, -10, 500, 20)

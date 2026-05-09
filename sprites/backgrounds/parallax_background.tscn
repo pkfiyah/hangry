@@ -1,0 +1,59 @@
+[gd_scene load_steps=7 format=3 uid="uid://dnxteh5y86em"]
+
+[ext_resource type="Texture2D" uid="uid://dmtnxrrxsnxly" path="res://sprites/backgrounds/bg_sky.png" id="1_roxm4"]
+[ext_resource type="Texture2D" uid="uid://7te8x1c6x1pk" path="res://sprites/backgrounds/bg_mountains.png" id="2_xjcpf"]
+[ext_resource type="Texture2D" uid="uid://b77vybsgf4an3" path="res://sprites/backgrounds/bg_far_haze.png" id="3_m60xs"]
+[ext_resource type="Texture2D" uid="uid://dfbbg16t285aw" path="res://sprites/backgrounds/bg_far_metro.png" id="4_x1gdl"]
+[ext_resource type="Texture2D" uid="uid://cqlgv6utmt35q" path="res://sprites/backgrounds/bg_mid_haze.png" id="5_hinsw"]
+[ext_resource type="Texture2D" uid="uid://brf4ofkth8a7o" path="res://sprites/backgrounds/bg_mid_metro.png" id="6_v70f5"]
+
+[node name="ParallaxBackground" type="ParallaxBackground"]
+
+[node name="Sky" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0, 0)
+motion_mirroring = Vector2(640, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="Sky"]
+texture = ExtResource("1_roxm4")
+centered = false
+
+[node name="Mountains" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.1, 0)
+motion_mirroring = Vector2(640, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="Mountains"]
+texture = ExtResource("2_xjcpf")
+centered = false
+
+[node name="FarHaze" type="ParallaxLayer" parent="."]
+visible = false
+motion_scale = Vector2(0.4, 0)
+motion_mirroring = Vector2(640, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="FarHaze"]
+texture = ExtResource("3_m60xs")
+centered = false
+
+[node name="FarMetro" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.3, 0)
+motion_mirroring = Vector2(640, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="FarMetro"]
+texture = ExtResource("4_x1gdl")
+centered = false
+
+[node name="MidHaze" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0, 0)
+motion_mirroring = Vector2(640, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="MidHaze"]
+texture = ExtResource("5_hinsw")
+centered = false
+
+[node name="MidMetro" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.6, 0)
+motion_mirroring = Vector2(640, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="MidMetro"]
+texture = ExtResource("6_v70f5")
+centered = false
