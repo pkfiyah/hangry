@@ -50,3 +50,11 @@ This is the most important rule. You **must never** attempt to alter, create, or
 Godot 4 uses Unique IDs (UIDs) for resources, ensuring that moving or renaming files doesn't break references.
 * **Always use `uid://...`** paths instead of static `res://...` paths for `preload()`, `load()`, and when assigning paths in code.
 * You can find the UID of a scene or resource by looking at the `.uid` file alongside it, or inspecting the top line of `.tscn` / `.tres` files.
+
+***
+
+## 🧠 Planning and Memory Storage
+
+When generating plans, architectural designs, or needing a scratchpad that you must refer back to later, **always use the private workspace memory folder**.
+* Store these documents in the temporary directory provided by the environment (e.g., `C:\Users\mitch\.gemini\tmp\hangry-1\memory\`).
+* Do not commit these scratchpad files to the git repository unless explicitly requested.
