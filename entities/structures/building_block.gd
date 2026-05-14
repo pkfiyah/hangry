@@ -11,6 +11,25 @@ var health: int = 100
 @onready var left_climb: Area2D = $LeftClimbArea
 @onready var right_climb: Area2D = $RightClimbArea
 
+const TILE_MAP: Dictionary = {
+	0: Vector2(0, 0), # No neighbors (e.g., top-left corner of image)
+	1: Vector2(2, 3), # Top neighbor only 
+	2: Vector2(1, 2), # Right neighbor only
+	3: Vector2(0, 2), # Top & Right neighbors (Bottom-Left edge of building)
+	4: Vector2(2, 3), # Bottom Middle
+	5: Vector2(0, 1), # 
+	6: Vector2(1, 0),  # Top Left Corner
+	7: Vector2(1, 2),  # Left Side
+	8: Vector2(2, 3),  # Currently Unused
+	9: Vector2(3, 3),  # Bottom Right Corner
+	10: Vector2(2, 3),  # Currently Unused
+	11: Vector2(2, 3), # Bottom Middle
+	12: Vector2(3, 0), # Top-Right Corner
+	13: Vector2(3, 2), # Right-Side
+	14: Vector2(2, 0), # Top Middle
+	15: Vector2(0, 0),  # Center / Inside
+}
+
 func _ready() -> void:
 	# Make sure the texture is an AtlasTexture and is unique to this instance
 	# so we don't change the region for every block simultaneously.
@@ -25,14 +44,12 @@ func update_texture(bitmask: int) -> void:
 		return
 		
 	var atlas: AtlasTexture = sprite.texture as AtlasTexture
-	# Assuming a 16x16 grid on the atlas, where the bitmask value (0-15) 
-	# corresponds to a specific tile index.
-	# You may need to adjust this math depending on how your atlas is laid out.
-	var columns: int = 4
-	var row: int = bitmask / columns
-	var col: int = bitmask % columns
 	
-	atlas.region = Rect2(col * 16.0, row * 16.0, 16.0, 16.0)
+	# Fallback to (0,0) if bitmask somehow isn't in the dictionary
+	var atlas_coords: Vector2 = TILE_MAP.get(bitmask, Vector2.ZERO) 
+	
+	# Multiply the column (x) and row (y) by the size of your tiles (16)
+	atlas.region = Rect2(atlas_coords.x * 16.0, atlas_coords.y * 16.0, 16.0, 16.0)
 
 ## Enables or disables climbable areas based on whether adjacent cells are empty
 func update_climbable(top_empty: bool, right_empty: bool, bottom_empty: bool, left_empty: bool) -> void:
