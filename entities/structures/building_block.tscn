@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://cciklrcrn2pj3"]
 
 [ext_resource type="Script" uid="uid://c46uoa5p14s6l" path="res://entities/structures/building_block.gd" id="1_ikim5"]
-[ext_resource type="Texture2D" uid="uid://bqtsjs7fn5t6" path="res://public_assets/Sidescroller Shooter - Central City/Assets/Buildings-mini.png" id="2_g72s5"]
+[ext_resource type="Texture2D" uid="uid://djwf31c33gq5h" path="res://public_assets/Sidescroller Shooter - Central City/Assets/Buildings-templatei.png" id="2_g72s5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g72s5"]
 size = Vector2(16, 16)
@@ -31,6 +31,7 @@ script = ExtResource("1_ikim5")
 shape = SubResource("RectangleShape2D_g72s5")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
 texture = SubResource("AtlasTexture_eyicb")
 
 [node name="TopClimbArea" type="Area2D" parent="."]
