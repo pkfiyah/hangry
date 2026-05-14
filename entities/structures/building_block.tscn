@@ -1,0 +1,66 @@
+[gd_scene load_steps=9 format=3 uid="uid://cciklrcrn2pj3"]
+
+[ext_resource type="Script" uid="uid://c46uoa5p14s6l" path="res://entities/structures/building_block.gd" id="1_ikim5"]
+[ext_resource type="Texture2D" uid="uid://bqtsjs7fn5t6" path="res://public_assets/Sidescroller Shooter - Central City/Assets/Buildings-mini.png" id="2_g72s5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g72s5"]
+size = Vector2(16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eyicb"]
+atlas = ExtResource("2_g72s5")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8ms7p"]
+size = Vector2(16, 2)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_x2ki2"]
+size = Vector2(16, 2)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jg64e"]
+size = Vector2(2, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_n8eyj"]
+size = Vector2(2, 16)
+
+[node name="BuildingBlock" type="StaticBody2D"]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_ikim5")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_g72s5")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("AtlasTexture_eyicb")
+
+[node name="TopClimbArea" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TopClimbArea"]
+position = Vector2(0, -9)
+shape = SubResource("RectangleShape2D_8ms7p")
+
+[node name="BottomClimbArea" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BottomClimbArea"]
+position = Vector2(0, 9)
+shape = SubResource("RectangleShape2D_x2ki2")
+
+[node name="LeftClimbArea" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftClimbArea"]
+position = Vector2(-9, 0)
+shape = SubResource("RectangleShape2D_jg64e")
+
+[node name="RightClimbArea" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightClimbArea"]
+position = Vector2(9, 0)
+shape = SubResource("RectangleShape2D_n8eyj")

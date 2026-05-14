@@ -4,29 +4,29 @@
 [ext_resource type="Script" uid="uid://j7sl5ew0fq4y" path="res://scripts/drift_camera.gd" id="2_kwv10"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ofpyr"]
-size = Vector2(32, 64)
+size = Vector2(16, 32)
 
 [node name="Kaiju" type="CharacterBody2D" groups=["player"]]
 collision_layer = 2
 script = ExtResource("1_7jq6t")
 
 [node name="Visual" type="ColorRect" parent="."]
-custom_minimum_size = Vector2(32, 64)
+custom_minimum_size = Vector2(16, 32)
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -16.0
-offset_top = -64.0
-offset_right = 16.0
+offset_left = -8.0
+offset_top = -32.0
+offset_right = 8.0
 grow_horizontal = 2
 grow_vertical = 0
 size_flags_horizontal = 4
 size_flags_vertical = 8
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -32)
+position = Vector2(0, -16)
 shape = SubResource("RectangleShape2D_ofpyr")
 
 [node name="Camera2D" type="Camera2D" parent="."]

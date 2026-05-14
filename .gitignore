@@ -3,3 +3,7 @@
 /android/
 builds/
 .gemini/
+
+# Design / Art files
+*.aseprite
+*.ase
