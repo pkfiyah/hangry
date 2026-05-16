@@ -22,8 +22,8 @@ func _ready():
 		var max_attempts = 10
 		
 		for attempt in range(max_attempts):
-			# A chunk is 800 wide. We keep them away from the very edges.
-			pos_x = randf_range(100.0, 700.0 - b_width_pixels)
+			# A chunk is 640 wide (matching CHUNK_WIDTH in main.gd). We keep them away from the very edges.
+			pos_x = randf_range(100.0, 540.0 - b_width_pixels)
 			
 			var overlap = false
 			for other in spawned_buildings:

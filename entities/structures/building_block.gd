@@ -2,7 +2,6 @@ extends StaticBody2D
 class_name BuildingBlock
 
 var grid_position: Vector2i
-var chunk_id: int
 var health: int = 100
 
 @onready var sprite: Sprite2D = $Sprite2D
