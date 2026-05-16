@@ -10,6 +10,12 @@ var health: int = 100
 @onready var bottom_climb: Area2D = $BottomClimbArea
 @onready var left_climb: Area2D = $LeftClimbArea
 @onready var right_climb: Area2D = $RightClimbArea
+@onready var platform_collision: CollisionShape2D = $PlatformBody/CollisionShape2D
+
+var climb_top_enabled: bool = false
+var climb_right_enabled: bool = false
+var climb_bottom_enabled: bool = false
+var climb_left_enabled: bool = false
 
 const TILE_MAP: Dictionary = {
 	0: Vector2(0, 0), # No neighbors (e.g., top-left corner of image)
@@ -53,17 +59,39 @@ func update_texture(bitmask: int) -> void:
 
 ## Enables or disables climbable areas based on whether adjacent cells are empty
 func update_climbable(top_empty: bool, right_empty: bool, bottom_empty: bool, left_empty: bool) -> void:
+	climb_top_enabled = top_empty
+	climb_right_enabled = right_empty
+	climb_bottom_enabled = bottom_empty
+	climb_left_enabled = left_empty
+
 	# Enable the climb area if the adjacent space is empty
 	_set_area_enabled(top_climb, top_empty)
 	_set_area_enabled(right_climb, right_empty)
 	_set_area_enabled(bottom_climb, bottom_empty)
 	_set_area_enabled(left_climb, left_empty)
+	
+	platform_collision.set_deferred("disabled", not top_empty)
+	
+	queue_redraw()
 
 func _set_area_enabled(area: Area2D, is_enabled: bool) -> void:
 	# Deferring this safely handles updates during physics steps
 	for child in area.get_children():
 		if child is CollisionShape2D:
 			child.set_deferred("disabled", not is_enabled)
+
+func _draw() -> void:
+	# Draw debug visuals for climb areas
+	var c = Color(0.0, 1.0, 0.0, 0.4) # Semi-transparent green
+	
+	if climb_top_enabled:
+		draw_rect(Rect2(-8, -10, 16, 2), c)
+	if climb_bottom_enabled:
+		draw_rect(Rect2(-8, 8, 16, 2), c)
+	if climb_left_enabled:
+		draw_rect(Rect2(-10, -8, 2, 16), c)
+	if climb_right_enabled:
+		draw_rect(Rect2(8, -8, 2, 16), c)
 
 func take_damage(amount: int) -> void:
 	health -= amount

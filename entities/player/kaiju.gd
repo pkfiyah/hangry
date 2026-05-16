@@ -9,10 +9,11 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 enum State { NORMAL, CLIMBING }
 var current_state = State.NORMAL
 
-var left_ray: RayCast2D
-var right_ray: RayCast2D
+@onready var left_ray: RayCast2D = $LeftRay
+@onready var right_ray: RayCast2D = $RightRay
+@onready var attack_area: Area2D = $AttackArea
+@onready var player_area: CollisionShape2D = $CollisionShape2D
 
-var attack_area: Area2D
 var facing_direction: int = 1
 var attack_timer: float = 0.0
 
@@ -24,31 +25,12 @@ var current_exp: int = 0
 var level: int = 1
 var exp_to_next_level: int = 100
 
-func _ready():
-	# Programmatically create RayCasts for wall detection so we don't
-	# need to edit the .tscn file directly.
-	left_ray = RayCast2D.new()
-	left_ray.position = Vector2(0, -12) # Center of the kaiju
-	left_ray.target_position = Vector2(-20, 0) # Slightly wider than half-width (32)
-	left_ray.collision_mask = 4 # Layer 3 (Buildings)
-	add_child(left_ray)
-	
-	right_ray = RayCast2D.new()
-	right_ray.position = Vector2(0, -12)
-	right_ray.target_position = Vector2(20, 0)
-	right_ray.collision_mask = 4 # Layer 3 (Buildings)
-	add_child(right_ray)
+signal health_changed(new_health)
+signal exp_changed(new_exp)
+signal level_up(new_level)
 
-	# Programmatically create the attack hitbox
-	attack_area = Area2D.new()
-	# Hitbox detects Layer 3 (Buildings, bit 3 -> value 4) and Layer 4 (Enemies, bit 4 -> value 8)
-	attack_area.collision_mask = 4 | 8 
-	var attack_shape = CollisionShape2D.new()
-	var attack_rect = RectangleShape2D.new()
-	attack_rect.size = Vector2(80, 100) # Hitbox size
-	attack_shape.shape = attack_rect
-	attack_area.add_child(attack_shape)
-	add_child(attack_area)
+func _ready():
+	pass
 
 func _physics_process(delta):
 	if invulnerable_timer > 0:
@@ -63,10 +45,6 @@ func _physics_process(delta):
 			process_normal(delta)
 		State.CLIMBING:
 			process_climbing(delta)
-
-signal health_changed(new_health)
-signal exp_changed(new_exp)
-signal level_up(new_level)
 
 func add_exp(amount: int):
 	current_exp += amount
@@ -127,11 +105,11 @@ func process_normal(delta):
 		if left_ray.is_colliding():
 			current_state = State.CLIMBING
 			velocity = Vector2.ZERO
-			global_position.x = left_ray.get_collision_point().x + 16
+			global_position.x = left_ray.get_collision_point().x + player_area.shape.get_rect().size.x/2
 		elif right_ray.is_colliding():
 			current_state = State.CLIMBING
 			velocity = Vector2.ZERO
-			global_position.x = right_ray.get_collision_point().x - 16
+			global_position.x = right_ray.get_collision_point().x - player_area.shape.get_rect().size.x/2
 
 	move_and_slide()
 

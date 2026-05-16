@@ -37,7 +37,7 @@ func randomize_building():
 	
 	# Add a roof for the player to stand on
 	var roof_body = StaticBody2D.new()
-	roof_body.collision_layer = 1 # World layer
+	roof_body.collision_layer = 32 # Platforms layer
 	roof_body.collision_mask = 0
 	
 	var roof_shape = CollisionShape2D.new()

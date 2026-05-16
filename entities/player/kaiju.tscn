@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://jukhumka4hbb"]
+[gd_scene load_steps=5 format=3 uid="uid://jukhumka4hbb"]
 
 [ext_resource type="Script" uid="uid://cauxjuq2ioru0" path="res://entities/player/kaiju.gd" id="1_7jq6t"]
 [ext_resource type="Script" uid="uid://j7sl5ew0fq4y" path="res://scripts/drift_camera.gd" id="2_kwv10"]
@@ -6,8 +6,12 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ofpyr"]
 size = Vector2(16, 32)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_n6nl6"]
+size = Vector2(80, 100)
+
 [node name="Kaiju" type="CharacterBody2D" groups=["player"]]
 collision_layer = 2
+collision_mask = 33
 script = ExtResource("1_7jq6t")
 
 [node name="Visual" type="ColorRect" parent="."]
@@ -31,3 +35,21 @@ shape = SubResource("RectangleShape2D_ofpyr")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 script = ExtResource("2_kwv10")
+
+[node name="LeftRay" type="RayCast2D" parent="."]
+target_position = Vector2(-16, 0)
+collision_mask = 16
+collide_with_areas = true
+collide_with_bodies = false
+
+[node name="RightRay" type="RayCast2D" parent="."]
+target_position = Vector2(16, 0)
+collision_mask = 16
+collide_with_areas = true
+collide_with_bodies = false
+
+[node name="AttackArea" type="Area2D" parent="."]
+collision_mask = 12
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
+shape = SubResource("RectangleShape2D_n6nl6")
