@@ -9,15 +9,8 @@ var active_chunks: Dictionary = {}
 
 @onready var kaiju = $Kaiju
 @onready var chunk_container = $ChunkContainer
-var enemy_spawner: EnemySpawner
 
 func _ready():
-	# Container to hold spawned enemies
-	enemy_spawner = EnemySpawner.new()
-	enemy_spawner.name = "EnemySpawner"
-	enemy_spawner.target = kaiju
-	add_child(enemy_spawner)
-	
 	# Initial spawn around the starting position
 	update_chunks(0)
 

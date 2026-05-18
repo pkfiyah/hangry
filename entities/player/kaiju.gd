@@ -63,6 +63,9 @@ func add_exp(amount: int):
 	while current_exp >= exp_to_next_level:
 		current_exp -= exp_to_next_level
 		level += 1
+		# Scale up the required EXP for the next level (e.g., 20% more each level)
+		exp_to_next_level = int(exp_to_next_level * 1.2)
+		
 		emit_signal("level_up", level)
 		print("Level Up! New Level: ", level)
 		

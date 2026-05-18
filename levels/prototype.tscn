@@ -1,18 +1,28 @@
-[gd_scene load_steps=5 format=3 uid="uid://bwfkbxuc360d0"]
+[gd_scene load_steps=9 format=3 uid="uid://bwfkbxuc360d0"]
 
 [ext_resource type="Script" uid="uid://c8adlgc6b0liy" path="res://scripts/main.gd" id="1_gxbh7"]
 [ext_resource type="PackedScene" uid="uid://jukhumka4hbb" path="res://entities/player/kaiju.tscn" id="3_7fmhn"]
 [ext_resource type="PackedScene" uid="uid://dnxteh5y86em" path="res://sprites/backgrounds/parallax_background.tscn" id="3_883nb"]
 [ext_resource type="PackedScene" uid="uid://cjeke76pr0qaw" path="res://ui/hud.tscn" id="4_7fmhn"]
+[ext_resource type="Script" uid="uid://qbxfhc4coox0" path="res://scripts/enemy_spawner.gd" id="5_qsqu8"]
+[ext_resource type="PackedScene" uid="uid://vt6l3144axrt" path="res://entities/kaiju/tacoza.tscn" id="6_gfq6j"]
+[ext_resource type="PackedScene" uid="uid://cqkp8rxqc7tyk" path="res://entities/kaiju/tupis.tscn" id="7_ycy2b"]
+[ext_resource type="PackedScene" uid="uid://dh4v8tqak7mgv" path="res://entities/vehicles/helo.tscn" id="8_a17vn"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_gxbh7")
 
 [node name="ChunkContainer" type="Node2D" parent="."]
 
-[node name="Kaiju" parent="." groups=["player"] instance=ExtResource("3_7fmhn")]
+[node name="Kaiju" parent="." instance=ExtResource("3_7fmhn")]
 position = Vector2(0, -100)
 
 [node name="ParallaxBackground" parent="." instance=ExtResource("3_883nb")]
 
 [node name="HUD" parent="." instance=ExtResource("4_7fmhn")]
+
+[node name="EnemySpawner" type="Node2D" parent="." node_paths=PackedStringArray("target")]
+script = ExtResource("5_qsqu8")
+ground_enemies = Array[PackedScene]([ExtResource("6_gfq6j"), ExtResource("7_ycy2b")])
+aerial_enemies = Array[PackedScene]([ExtResource("8_a17vn")])
+target = NodePath("../Kaiju")

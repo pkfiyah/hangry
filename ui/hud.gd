@@ -6,6 +6,8 @@ extends CanvasLayer
 @onready var controls_panel = $ControlsPanel
 @onready var controls_button = $ControlsButton
 
+@onready var level_up_menu: LevelUpMenu = $LevelUpMenu
+
 func _ready():
 	# Ensure the HUD continues to process input when the game is paused
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -15,9 +17,12 @@ func _ready():
 	# Find the Kaiju and connect health updates
 	var kaiju = get_tree().current_scene.get_node_or_null("Kaiju")
 	if kaiju:
-		# Set initial health values
+		# Set initial health and exp values
 		health_bar.max_value = kaiju.max_health
 		health_bar.value = kaiju.health
+		
+		exp_bar.max_value = kaiju.exp_to_next_level
+		exp_bar.value = kaiju.current_exp
 		
 		if not kaiju.has_signal("health_changed"):
 			kaiju.add_user_signal("health_changed")
@@ -26,6 +31,10 @@ func _ready():
 		if not kaiju.has_signal("exp_changed"):
 			kaiju.add_user_signal("exp_changed")
 		kaiju.connect("exp_changed", _on_exp_changed)
+		
+		if not kaiju.has_signal("level_up"):
+			kaiju.add_user_signal("level_up")
+		kaiju.connect("level_up", _on_level_up)
 
 func _on_health_changed(new_health):
 	# Animate the health bar shrinking
@@ -33,9 +42,19 @@ func _on_health_changed(new_health):
 	tween.tween_property(health_bar, "value", new_health, 0.2)
 
 func _on_exp_changed(new_exp):
-	# Animate the health bar shrinking
+	# Animate the exp bar
 	var tween = create_tween()
 	tween.tween_property(exp_bar, "value", new_exp, 0.2)
+
+func _on_level_up(new_level: int):
+	# Scale up the required EXP for the next level
+	var kaiju = get_tree().current_scene.get_node_or_null("Kaiju")
+	if kaiju:
+		exp_bar.max_value = kaiju.exp_to_next_level
+		exp_bar.value = 0 # Visual reset
+		
+	if is_instance_valid(level_up_menu):
+		level_up_menu.display_options()
 
 func _on_controls_button_pressed():
 	toggle_pause()
