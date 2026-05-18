@@ -1,0 +1,47 @@
+[gd_scene load_steps=8 format=3 uid="uid://dh4v8tqak7mgv"]
+
+[ext_resource type="Script" uid="uid://rpu0q7bukbl8" path="res://entities/vehicles/helo.gd" id="1_7gfnj"]
+[ext_resource type="Resource" uid="uid://bavdgqix3ney7" path="res://resources/enemy_stats/helo_stats.tres" id="2_04r2t"]
+[ext_resource type="Texture2D" uid="uid://dona48ijslomg" path="res://sprites/vehicles/helo_sprite_sheet.png" id="3_ixuo5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2hqyu"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6wa7v"]
+atlas = ExtResource("3_ixuo5")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wso4r"]
+atlas = ExtResource("3_ixuo5")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_3v5bi"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6wa7v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wso4r")
+}],
+"loop": true,
+"name": &"default",
+"speed": 15.0
+}]
+
+[node name="Helo" type="CharacterBody2D"]
+script = ExtResource("1_7gfnj")
+stats = ExtResource("2_04r2t")
+
+[node name="Hitbox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource("RectangleShape2D_2hqyu")
+
+[node name="Sprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_3v5bi")
+autoplay = "default"
+frame_progress = 0.29717755
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+rect = Rect2(-200, -220, 400, 400)

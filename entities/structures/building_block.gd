@@ -4,6 +4,8 @@ class_name BuildingBlock
 var grid_position: Vector2i
 var health: int = 100
 
+signal block_destroyed(cell: Vector2i)
+
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var top_climb: Area2D = $TopClimbArea
 @onready var bottom_climb: Area2D = $BottomClimbArea
@@ -98,7 +100,5 @@ func take_damage(amount: int) -> void:
 		destroy()
 
 func destroy() -> void:
-	# The building generator will listen to this or we can emit a signal
-	# For now, we'll just queue_free. Phase 3 of the plan will expand this
-	# to notify the generator to update neighbors and spawn debris.
+	block_destroyed.emit(grid_position)
 	queue_free()

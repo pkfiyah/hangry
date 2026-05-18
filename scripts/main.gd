@@ -7,23 +7,16 @@ var chunk_scene = preload("uid://bgjxwxruwafd2")
 var current_chunk_index = 0
 var active_chunks: Dictionary = {}
 
-var enemy_spawn_timer: float = 3.0
-var enemy_scenes: Array[PackedScene] = []
-
 @onready var kaiju = $Kaiju
 @onready var chunk_container = $ChunkContainer
-@onready var enemy_container = Node2D.new()
+var enemy_spawner: EnemySpawner
 
 func _ready():
-	# Load available enemy scenes
-	if ResourceLoader.exists("uid://cqkp8rxqc7tyk"): # tupis
-		enemy_scenes.append(load("uid://cqkp8rxqc7tyk"))
-	if ResourceLoader.exists("uid://vt6l3144axrt"): # tacoza
-		enemy_scenes.append(load("uid://vt6l3144axrt"))
-		
 	# Container to hold spawned enemies
-	enemy_container.name = "EnemyContainer"
-	add_child(enemy_container)
+	enemy_spawner = EnemySpawner.new()
+	enemy_spawner.name = "EnemySpawner"
+	enemy_spawner.target = kaiju
+	add_child(enemy_spawner)
 	
 	# Initial spawn around the starting position
 	update_chunks(0)
@@ -45,29 +38,6 @@ func _process(delta):
 	if kaiju_chunk_pos != current_chunk_index:
 		current_chunk_index = kaiju_chunk_pos
 		update_chunks(current_chunk_index)
-
-	# Handle enemy spawning
-	if enemy_scenes.size() > 0:
-		enemy_spawn_timer -= delta
-		if enemy_spawn_timer <= 0.0:
-			spawn_enemy()
-			enemy_spawn_timer = randf_range(3.0, 6.0)
-
-func spawn_enemy():
-	print("Spawning?")
-	if enemy_scenes.is_empty(): return
-	
-	var random_scene = enemy_scenes.pick_random()
-	var enemy = random_scene.instantiate()
-	# Spawn either far left (-1) or far right (1)
-	var spawn_dir = 1 if randf() > 0.5 else -1
-	# Spawn 800 pixels away from the player (off screen)
-	var spawn_x = kaiju.global_position.x + (spawn_dir * 800)
-	
-	enemy.global_position = Vector2(spawn_x, -100)
-	# The enemy should move towards the player
-	enemy.direction = -spawn_dir
-	enemy_container.add_child(enemy)
 
 func update_chunks(center_index: int):
 	# Spawn required chunks within the radius

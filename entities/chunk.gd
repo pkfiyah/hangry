@@ -13,8 +13,8 @@ func _ready():
 	for i in range(num_buildings):
 		var b = building_scene.instantiate()
 		
-		var width_blocks = randi_range(4, 12)
-		var height_blocks = randi_range(5, 20)
+		var width_blocks = randi_range(10, 16)
+		var height_blocks = randi_range(12, 40)
 		var b_width_pixels = width_blocks * 16.0
 		
 		var valid_position = false

@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dt74ga2g6syw"
-path="res://.godot/imported/helo_muzzle_flash.png-2e269de5d2adbafa628c5ecd1358baf1.ctex"
+path="res://.godot/imported/helo_muzzle_flash.png-5c4bf43338a848239e903f4f05ca7e35.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://entities/vehicles/helo_muzzle_flash.png"
-dest_files=["res://.godot/imported/helo_muzzle_flash.png-2e269de5d2adbafa628c5ecd1358baf1.ctex"]
+source_file="res://sprites/vehicles/helo_muzzle_flash.png"
+dest_files=["res://.godot/imported/helo_muzzle_flash.png-5c4bf43338a848239e903f4f05ca7e35.ctex"]
 
 [params]
 

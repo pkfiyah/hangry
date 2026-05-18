@@ -9,7 +9,7 @@ var blocks: Dictionary = {}
 
 # Dimensions in blocks
 var grid_width: int = 5
-var grid_height: int = 10
+var grid_height: int = 12
 
 func setup(width: int, height: int) -> void:
 	grid_width = width
@@ -32,6 +32,7 @@ func _generate_blocks() -> void:
 			
 			var block: BuildingBlock = building_block_scene.instantiate()
 			block.grid_position = cell
+			block.block_destroyed.connect(remove_block)
 			
 			# Map to local position (center of the cell)
 			block.position = Vector2(cell.x * block_size + (block_size / 2.0), cell.y * block_size + (block_size / 2.0))

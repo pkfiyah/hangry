@@ -2,7 +2,9 @@ extends Camera2D
 
 @export var look_ahead_distance = 50.0
 @export var smooth_speed = 5.0
-@export var fixed_y_position = -160.0 # Adjusted to fit the 640x360 resolution and keep the ground visible
+@export var bottom_limit = -160.0 # Replaces fixed_y_position to prevent seeing underground
+@export var vertical_offset = -80.0 # How far above the player the camera should aim when climbing
+@export var vertical_smooth_speed = 5.0 # Speed of vertical camera follow
 
 @onready var target = get_parent()
 
@@ -19,7 +21,10 @@ func _ready():
 	# Set initial position
 	if target:
 		global_position.x = target.global_position.x
-		global_position.y = fixed_y_position
+		
+		# Calculate initial y position based on target, but clamped to bottom_limit
+		var target_y = min(bottom_limit, target.global_position.y + vertical_offset)
+		global_position.y = target_y
 
 func _process(delta):
 	if not is_instance_valid(target):
@@ -28,8 +33,11 @@ func _process(delta):
 	# Instantly follow the target's X position
 	global_position.x = target.global_position.x
 	
-	# Lock the Y position
-	global_position.y = fixed_y_position
+	# Calculate desired Y position (follow player, but don't go below bottom_limit)
+	var target_y = min(bottom_limit, target.global_position.y + vertical_offset)
+	
+	# Smoothly interpolate the Y position
+	global_position.y = lerp(global_position.y, target_y, vertical_smooth_speed * delta)
 	
 	var move_dir = Input.get_axis("ui_left", "ui_right")
 	

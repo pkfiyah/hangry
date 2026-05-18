@@ -14,6 +14,7 @@ motion_scale = Vector2(0, 0)
 motion_mirroring = Vector2(640, 0)
 
 [node name="Sprite2D" type="Sprite2D" parent="Sky"]
+texture_filter = 1
 texture = ExtResource("1_roxm4")
 centered = false
 
@@ -22,6 +23,7 @@ motion_scale = Vector2(0.1, 0)
 motion_mirroring = Vector2(640, 0)
 
 [node name="Sprite2D" type="Sprite2D" parent="Mountains"]
+texture_filter = 1
 texture = ExtResource("2_xjcpf")
 centered = false
 
@@ -31,6 +33,7 @@ motion_scale = Vector2(0.4, 0)
 motion_mirroring = Vector2(640, 0)
 
 [node name="Sprite2D" type="Sprite2D" parent="FarHaze"]
+texture_filter = 1
 texture = ExtResource("3_m60xs")
 centered = false
 
@@ -39,6 +42,7 @@ motion_scale = Vector2(0.3, 0)
 motion_mirroring = Vector2(640, 0)
 
 [node name="Sprite2D" type="Sprite2D" parent="FarMetro"]
+texture_filter = 1
 texture = ExtResource("4_x1gdl")
 centered = false
 
@@ -47,6 +51,7 @@ motion_scale = Vector2(0, 0)
 motion_mirroring = Vector2(640, 0)
 
 [node name="Sprite2D" type="Sprite2D" parent="MidHaze"]
+texture_filter = 1
 texture = ExtResource("5_hinsw")
 centered = false
 
@@ -55,5 +60,6 @@ motion_scale = Vector2(0.6, 0)
 motion_mirroring = Vector2(640, 0)
 
 [node name="Sprite2D" type="Sprite2D" parent="MidMetro"]
+texture_filter = 1
 texture = ExtResource("6_v70f5")
 centered = false
