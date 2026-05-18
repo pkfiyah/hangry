@@ -2,6 +2,7 @@ extends StaticBody2D
 class_name BuildingBlock
 
 var grid_position: Vector2i
+var max_health: int = 100
 var health: int = 100
 
 signal block_destroyed(cell: Vector2i)
@@ -17,6 +18,12 @@ var climb_top_enabled: bool = false
 var climb_right_enabled: bool = false
 var climb_bottom_enabled: bool = false
 var climb_left_enabled: bool = false
+
+var current_damage_tint: Color = Color.WHITE
+
+var is_falling: bool = false
+var fall_velocity: float = 0.0
+var gravity: float = 580.0 # Default gravity
 
 const TILE_MAP: Dictionary = {
 	0: Vector2(0, 0), # No neighbors (e.g., top-left corner of image)
@@ -38,6 +45,8 @@ const TILE_MAP: Dictionary = {
 }
 
 func _ready() -> void:
+	set_physics_process(false) # Disable physics process until it needs to fall
+	
 	# Make sure the texture is an AtlasTexture and is unique to this instance
 	# so we don't change the region for every block simultaneously.
 	if sprite.texture is AtlasTexture:
@@ -96,9 +105,71 @@ func _draw() -> void:
 
 func take_damage(amount: int) -> void:
 	health -= amount
+	
 	if health <= 0:
 		destroy()
+	else:
+		_update_damage_visuals()
+		
+		# Flash white on hit
+		if is_instance_valid(sprite):
+			sprite.modulate = Color(10, 10, 10, 1)
+			await get_tree().create_timer(0.05).timeout
+			if is_instance_valid(sprite):
+				sprite.modulate = current_damage_tint
+
+func _update_damage_visuals() -> void:
+	var health_percent: float = float(health) / float(max_health)
+	# Darken and slightly tint red as health decreases
+	var shade: float = lerp(0.3, 1.0, health_percent)
+	var red_tint: float = lerp(0.7, 1.0, health_percent)
+	
+	current_damage_tint = Color(red_tint, shade, shade, 1.0)
+	if is_instance_valid(sprite):
+		sprite.modulate = current_damage_tint
 
 func destroy() -> void:
-	block_destroyed.emit(grid_position)
+	if not is_falling:
+		block_destroyed.emit(grid_position)
 	queue_free()
+
+func start_falling() -> void:
+	is_falling = true
+	# Disable climb areas so player doesn't try to grab a falling block
+	update_climbable(false, false, false, false)
+	# Also disable the static collision so it doesn't get stuck in the air
+	# The raycast will handle dynamic collision check
+	platform_collision.set_deferred("disabled", true)
+	set_physics_process(true)
+
+func _physics_process(delta: float) -> void:
+	if not is_falling:
+		return
+		
+	fall_velocity += gravity * delta
+	var move_dist = fall_velocity * delta
+	
+	var space_state = get_world_2d().direct_space_state
+	# Raycast from bottom center of the block downwards
+	var query = PhysicsRayQueryParameters2D.create(global_position + Vector2(0, 8), global_position + Vector2(0, move_dist + 8.0))
+	query.exclude = [self.get_rid()]
+	
+	var result = space_state.intersect_ray(query)
+	
+	if result:
+		# Align position with surface hit, minus offset
+		global_position.y = result.position.y - 8.0
+
+		# If it hits another block or entity, damage it (but exclude the player)
+		var collider = result.collider
+		if is_instance_valid(collider) and collider.has_method("take_damage") and not collider.is_in_group("player"):
+			collider.take_damage(10) # Fall damage
+
+		# Destroy this falling block upon impact
+		destroy()
+	else:
+		global_position.y += move_dist
+		
+	# Despawn if it falls completely out of bounds
+	if global_position.y > 2000.0:
+		queue_free()

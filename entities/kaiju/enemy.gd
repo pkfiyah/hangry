@@ -67,12 +67,12 @@ func take_damage(amount: int) -> void:
 		visual.modulate = Color.WHITE
 		
 	if current_health <= 0:
-		die()
+		die(true)
 
-func die() -> void:
+func die(award_exp: bool) -> void:
 	var players = get_tree().get_nodes_in_group("player")
 	for player in players:
-		if player.has_method("add_exp"):
+		if player.has_method("add_exp") && award_exp:
 			var exp_val = stats.exp_reward if stats else 10
 			player.add_exp(exp_val)
 	queue_free()

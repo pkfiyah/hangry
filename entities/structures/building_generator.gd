@@ -79,3 +79,49 @@ func remove_block(cell: Vector2i) -> void:
 		_update_block_state(cell + Vector2i.RIGHT)
 		_update_block_state(cell + Vector2i.DOWN)
 		_update_block_state(cell + Vector2i.LEFT)
+		
+		_check_structural_integrity()
+
+func _check_structural_integrity() -> void:
+	var supported_blocks = {}
+	var blocks_to_check = []
+	
+	# Initial pass: Find ground blocks (y == -1)
+	for cell in blocks.keys():
+		if cell.y == -1:
+			blocks_to_check.append(cell)
+			supported_blocks[cell] = true
+			
+	# BFS to find all connected blocks
+	while blocks_to_check.size() > 0:
+		var current = blocks_to_check.pop_front()
+		
+		var neighbors = [
+			current + Vector2i.UP,
+			current + Vector2i.RIGHT,
+			current + Vector2i.DOWN,
+			current + Vector2i.LEFT
+		]
+		
+		for neighbor in neighbors:
+			if blocks.has(neighbor) and not supported_blocks.has(neighbor):
+				supported_blocks[neighbor] = true
+				blocks_to_check.append(neighbor)
+				
+	# Any block not in supported_blocks should fall
+	var falling_cells = []
+	for cell in blocks.keys():
+		if not supported_blocks.has(cell):
+			falling_cells.append(cell)
+			
+	for cell in falling_cells:
+		var block = blocks[cell]
+		blocks.erase(cell)
+		
+		_update_block_state(cell + Vector2i.UP)
+		_update_block_state(cell + Vector2i.RIGHT)
+		_update_block_state(cell + Vector2i.DOWN)
+		_update_block_state(cell + Vector2i.LEFT)
+		
+		if block.has_method("start_falling"):
+			block.start_falling()
