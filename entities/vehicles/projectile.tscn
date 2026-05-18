@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://cudttnwwbpchk"]
+
+[ext_resource type="Script" uid="uid://c0joqe2cfj8o1" path="res://entities/vehicles/projectile.gd" id="1_o0aop"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_f5pa7"]
+radius = 6.0
+
+[node name="Projectile" type="Area2D"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_o0aop")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_f5pa7")

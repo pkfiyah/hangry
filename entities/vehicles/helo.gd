@@ -7,8 +7,13 @@ class_name HeloEnemy
 @export var max_tilt_angle: float = 15.0 # Degrees to tilt when moving
 @export var tilt_speed: float = 5.0 # Degrees to tilt when moving
 
+@export_category("Combat")
+@export var projectile_scene: PackedScene
+@export var fire_rate: float = 1.5 # Seconds between shots
+@export var attack_range: float = 350.0
 
 var target_node: Node2D
+var fire_cooldown: float = 0.0
 
 func _ready() -> void:
 	super._ready() # Call parent setup (stats, hitbox, despawn timer)
@@ -19,6 +24,9 @@ func _ready() -> void:
 		target_node = players[0]
 
 func _physics_process(delta: float) -> void:
+	if fire_cooldown > 0:
+		fire_cooldown -= delta
+
 	if not is_instance_valid(target_node):
 		# Fallback: Just fly straight if no player found
 		velocity = Vector2(direction * float_speed, 0)
@@ -28,6 +36,7 @@ func _physics_process(delta: float) -> void:
 		return
 		
 	var to_player = target_node.global_position - global_position
+	var distance_to_player = to_player.length()
 	
 	# Horizontal movement: Approach if further than min_distance, Retreat otherwise
 	var move_x = 0.0
@@ -57,4 +66,24 @@ func _physics_process(delta: float) -> void:
 		
 		visual.rotation = lerp(visual.rotation, target_rotation, tilt_speed * delta)
 		
-	# (TODO) Shooting logic will go here
+	# Shooting logic
+	if distance_to_player <= attack_range and fire_cooldown <= 0.0:
+		shoot(to_player.normalized())
+
+func shoot(shoot_direction: Vector2) -> void:
+	if not projectile_scene:
+		push_warning("HeloEnemy has no projectile_scene assigned!")
+		fire_cooldown = fire_rate # Prevent spamming warnings
+		return
+		
+	fire_cooldown = fire_rate
+	
+	var proj = projectile_scene.instantiate() as Projectile
+	if proj:
+		proj.global_position = global_position
+		proj.direction = shoot_direction
+		if stats:
+			proj.damage = stats.damage
+		
+		# Add projectile to the main scene tree, not as a child of the enemy
+		get_tree().current_scene.add_child(proj)
