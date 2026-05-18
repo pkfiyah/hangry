@@ -19,7 +19,7 @@ texture = ExtResource("1_roxm4")
 centered = false
 
 [node name="Mountains" type="ParallaxLayer" parent="."]
-motion_scale = Vector2(0.1, 0)
+motion_scale = Vector2(0.1, 0.05)
 motion_mirroring = Vector2(640, 0)
 
 [node name="Sprite2D" type="Sprite2D" parent="Mountains"]
@@ -29,7 +29,7 @@ centered = false
 
 [node name="FarHaze" type="ParallaxLayer" parent="."]
 visible = false
-motion_scale = Vector2(0.4, 0)
+motion_scale = Vector2(0.4, 0.1)
 motion_mirroring = Vector2(640, 0)
 
 [node name="Sprite2D" type="Sprite2D" parent="FarHaze"]
@@ -38,7 +38,7 @@ texture = ExtResource("3_m60xs")
 centered = false
 
 [node name="FarMetro" type="ParallaxLayer" parent="."]
-motion_scale = Vector2(0.3, 0)
+motion_scale = Vector2(0.3, 0.15)
 motion_mirroring = Vector2(640, 0)
 
 [node name="Sprite2D" type="Sprite2D" parent="FarMetro"]
@@ -47,7 +47,7 @@ texture = ExtResource("4_x1gdl")
 centered = false
 
 [node name="MidHaze" type="ParallaxLayer" parent="."]
-motion_scale = Vector2(0, 0)
+motion_scale = Vector2(0, 0.2)
 motion_mirroring = Vector2(640, 0)
 
 [node name="Sprite2D" type="Sprite2D" parent="MidHaze"]
@@ -56,7 +56,8 @@ texture = ExtResource("5_hinsw")
 centered = false
 
 [node name="MidMetro" type="ParallaxLayer" parent="."]
-motion_scale = Vector2(0.6, 0)
+motion_scale = Vector2(0.6, 0.1)
+motion_offset = Vector2(0, -20)
 motion_mirroring = Vector2(640, 0)
 
 [node name="Sprite2D" type="Sprite2D" parent="MidMetro"]

@@ -1,9 +1,12 @@
 extends Enemy
 class_name HeloEnemy
 
-@export var min_distance_to_player: float = 200.0
+@export var min_distance_to_player: float = 120.0
 @export var float_speed: float = 100.0
 @export var vertical_follow_speed: float = 50.0
+@export var max_tilt_angle: float = 15.0 # Degrees to tilt when moving
+@export var tilt_speed: float = 5.0 # Degrees to tilt when moving
+
 
 var target_node: Node2D
 
@@ -26,13 +29,15 @@ func _physics_process(delta: float) -> void:
 		
 	var to_player = target_node.global_position - global_position
 	
-	# Horizontal movement: Approach if further than min_distance
+	# Horizontal movement: Approach if further than min_distance, Retreat otherwise
 	var move_x = 0.0
 	if abs(to_player.x) > min_distance_to_player:
 		move_x = sign(to_player.x) * float_speed
+	elif abs(to_player.x) < min_distance_to_player - 40.0:
+		move_x = -1 * sign(to_player.x) * float_speed;
 		
 	# Vertical movement: Try to stay slightly above the player
-	var target_y = target_node.global_position.y - 150.0
+	var target_y = target_node.global_position.y - 80.0
 	var move_y = 0.0
 	if abs(global_position.y - target_y) > 10.0:
 		move_y = sign(target_y - global_position.y) * vertical_follow_speed
@@ -44,5 +49,12 @@ func _physics_process(delta: float) -> void:
 	direction = -1 if to_player.x < 0 else 1
 	if is_instance_valid(visual):
 		visual.flip_h = direction < 0
+		
+		# Tilt based on horizontal movement
+		var target_rotation = 0.0
+		if move_x != 0:
+			target_rotation = sign(move_x) * deg_to_rad(max_tilt_angle)
+		
+		visual.rotation = lerp(visual.rotation, target_rotation, tilt_speed * delta)
 		
 	# (TODO) Shooting logic will go here

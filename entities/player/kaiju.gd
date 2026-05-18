@@ -21,6 +21,8 @@ var health: int = 100
 var max_health: int = 100
 var invulnerable_timer: float = 0.0
 
+var state_change_cooldown_timer: float = 0.0
+
 var current_exp: int = 0
 var level: int = 1
 var exp_to_next_level: int = 100
@@ -32,6 +34,12 @@ signal level_up(new_level)
 func _ready():
 	pass
 
+func _change_state(new_state:State): 
+	if state_change_cooldown_timer <= 0.0:
+		current_state = new_state
+		state_change_cooldown_timer = 0.3;
+		
+
 func _physics_process(delta):
 	if invulnerable_timer > 0:
 		invulnerable_timer -= delta
@@ -39,6 +47,9 @@ func _physics_process(delta):
 		visible = fmod(invulnerable_timer, 0.2) > 0.1
 	else:
 		visible = true
+		
+	if state_change_cooldown_timer > 0:
+		state_change_cooldown_timer -= delta
 
 	match current_state:
 		State.NORMAL:
@@ -103,11 +114,11 @@ func process_normal(delta):
 	var vert_direction = Input.get_axis("ui_up", "ui_down")
 	if vert_direction != 0:
 		if left_ray.is_colliding():
-			current_state = State.CLIMBING
+			_change_state(State.CLIMBING)
 			velocity = Vector2.ZERO
 			global_position.x = left_ray.get_collision_point().x + player_area.shape.get_rect().size.x/2
 		elif right_ray.is_colliding():
-			current_state = State.CLIMBING
+			_change_state(State.CLIMBING)
 			velocity = Vector2.ZERO
 			global_position.x = right_ray.get_collision_point().x - player_area.shape.get_rect().size.x/2
 
@@ -142,7 +153,7 @@ func process_climbing(delta):
 		wall_direction = 1  # Wall is to our right
 	else:
 		# We've climbed past the top or bottom of the building
-		current_state = State.NORMAL
+		_change_state(State.NORMAL)
 		return
 
 	# Vertical movement (ui_up is negative, ui_down is positive)
@@ -159,11 +170,12 @@ func process_climbing(delta):
 		velocity.y = JUMP_VELOCITY
 		# Jump in opposite direction of the wall
 		velocity.x = -wall_direction * SPEED 
-		current_state = State.NORMAL
+		_change_state(State.NORMAL)
+		
 	elif (wall_direction == -1 and horiz_direction > 0) or \
 		 (wall_direction == 1 and horiz_direction < 0):
 		# Detach by pressing away from the wall
-		current_state = State.NORMAL
+		_change_state(State.NORMAL)
 		
 	# Attack while climbing (optional, but fun!)
 	if attack_timer > 0:
