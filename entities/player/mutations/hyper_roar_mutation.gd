@@ -1,4 +1,4 @@
-class_name MeleeSlashMutation extends Mutation
+class_name HyperRoarMutation extends Mutation
 
 @onready var attack_area: Area2D = $AttackArea
 
@@ -29,15 +29,15 @@ func execute() -> void:
 		return
 		
 	# Visual feedback
-	var slash = ColorRect.new()
-	slash.color = Color.RED
-	slash.size = Vector2(80, 100)
-	slash.position = Vector2(-40, -50)
-	attack_area.add_child(slash)
+	var roar = ColorRect.new()
+	roar.color = Color.RED
+	roar.size = Vector2(80, 100)
+	roar.position = Vector2(-40, -50)
+	attack_area.add_child(roar)
 	
 	var tween = create_tween()
-	tween.tween_property(slash, "modulate:a", 0.0, 0.2)
-	tween.tween_callback(slash.queue_free)
+	tween.tween_property(roar, "modulate:a", 0.0, 0.2)
+	tween.tween_callback(roar.queue_free)
 
 	# Apply damage
 	var damage_amount = level_data.damage

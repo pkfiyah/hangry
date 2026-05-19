@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cauxjuq2ioru0" path="res://entities/player/kaiju.gd" id="1_7jq6t"]
 [ext_resource type="Resource" uid="uid://b4df2j3iqsgjs" path="res://resources/mutations/mutation_database.tres" id="2_355qi"]
 [ext_resource type="Script" uid="uid://j7sl5ew0fq4y" path="res://scripts/drift_camera.gd" id="2_kwv10"]
-[ext_resource type="PackedScene" uid="uid://btj2emilshqwi" path="res://entities/player/mutations/melee_slash_mutation.tscn" id="3_058np"]
+[ext_resource type="PackedScene" uid="uid://btj2emilshqwi" path="res://entities/player/mutations/hyper_roar_mutation.tscn" id="3_058np"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ofpyr"]
 size = Vector2(16, 32)
@@ -50,4 +50,4 @@ collide_with_bodies = false
 
 [node name="Mutations" type="Node2D" parent="."]
 
-[node name="MeleeSlashMutation" parent="Mutations" instance=ExtResource("3_058np")]
+[node name="HyperRoarMutation" parent="Mutations" instance=ExtResource("3_058np")]
