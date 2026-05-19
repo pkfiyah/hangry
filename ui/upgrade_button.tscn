@@ -1,0 +1,40 @@
+[gd_scene load_steps=2 format=3 uid="uid://6ndkj4u6lom8"]
+
+[ext_resource type="Texture2D" uid="uid://6o5y3qxjqq88" path="res://sprites/placeholders/hyper_roar_16x16.png" id="1_hwdby"]
+
+[node name="UpgradeButton" type="PanelContainer"]
+custom_minimum_size = Vector2(48, 48)
+offset_right = 48.0
+offset_bottom = 48.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="IconBackground" type="ColorRect" parent="HBoxContainer"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="IconTexture" type="TextureRect" parent="HBoxContainer/IconBackground"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("1_hwdby")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DescriptionLabel" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Upgrade Text"
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 2
+flat = true

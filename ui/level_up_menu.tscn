@@ -51,18 +51,3 @@ horizontal_alignment = 1
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-
-[node name="Upgrade1" type="Button" parent="Panel/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Default Upgrade 1 Text"
-
-[node name="Upgrade2" type="Button" parent="Panel/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Default Upgrade 2 Text"
-
-[node name="Upgrade3" type="Button" parent="Panel/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Default Upgrade 3 Text"

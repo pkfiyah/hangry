@@ -36,6 +36,7 @@ var exp_to_next_level: int = 10
 signal health_changed(new_health)
 signal exp_changed(new_exp)
 signal level_up(new_level)
+signal mutation_added(mutation)
 
 func _ready():
 	# Ensure the UI connects to our signal
@@ -108,8 +109,9 @@ func _generate_level_up_options(count: int) -> Array[Dictionary]:
 					"mutation_name": child.stats.mutation_name,
 					"is_new": false,
 					"next_level": next_lvl,
-					"description": lvl_data.description,
-					"existing_node": child
+					"description": child.stats.mutation_description,
+					"existing_node": child,
+					"stats": child.stats
 				})
 				
 	# Check database for new mutations not yet acquired
@@ -135,7 +137,8 @@ func _generate_level_up_options(count: int) -> Array[Dictionary]:
 					"is_new": true,
 					"next_level": 1,
 					"description": lvl_data.description,
-					"scene": scene
+					"scene": scene,
+					"stats": temp_instance.stats
 				})
 			temp_instance.free()
 			
@@ -149,6 +152,7 @@ func _on_upgrade_selected(option_data: Dictionary) -> void:
 		var new_mutation = scene.instantiate()
 		new_mutation.name = option_data.mutation_id
 		mutations_container.add_child(new_mutation)
+		emit_signal("mutation_added", new_mutation)
 	else:
 		var existing: Mutation = option_data.existing_node
 		if existing:

@@ -1,7 +1,8 @@
-[gd_resource type="Resource" script_class="MutationStats" load_steps=5 format=3 uid="uid://st47rdhva0kp"]
+[gd_resource type="Resource" script_class="MutationStats" load_steps=7 format=3 uid="uid://st47rdhva0kp"]
 
 [ext_resource type="Script" uid="uid://cidqm1ddjltxt" path="res://resources/mutations/mutation_level_data.gd" id="1_e5f6b"]
 [ext_resource type="Script" uid="uid://du3n250yhoh" path="res://resources/mutations/mutation_stats.gd" id="2_7pqf2"]
+[ext_resource type="Texture2D" uid="uid://6o5y3qxjqq88" path="res://sprites/placeholders/hyper_roar_16x16.png" id="2_syoon"]
 
 [sub_resource type="Resource" id="Resource_qnrd4"]
 script = ExtResource("1_e5f6b")
@@ -15,8 +16,17 @@ cooldown = 0.5
 radius = 150.0
 metadata/_custom_type_script = "uid://cidqm1ddjltxt"
 
+[sub_resource type="Resource" id="Resource_7pqf2"]
+script = ExtResource("1_e5f6b")
+damage = 50
+cooldown = 0.5
+radius = 200.0
+metadata/_custom_type_script = "uid://cidqm1ddjltxt"
+
 [resource]
 script = ExtResource("2_7pqf2")
 mutation_name = "Hyper Roar"
-levels = Array[ExtResource("1_e5f6b")]([SubResource("Resource_qnrd4"), SubResource("Resource_drqlb")])
+mutation_icon = ExtResource("2_syoon")
+icon_bg_color = Color(1, 0.71515757, 0.66681814, 1)
+levels = Array[ExtResource("1_e5f6b")]([SubResource("Resource_qnrd4"), SubResource("Resource_drqlb"), SubResource("Resource_7pqf2")])
 metadata/_custom_type_script = "uid://du3n250yhoh"

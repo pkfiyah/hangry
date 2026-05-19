@@ -1,7 +1,7 @@
 class_name NuclearGlowMutation extends Mutation
 
 @onready var glow_area: Area2D = $GlowArea
-@onready var glow_visual: ColorRect = $GlowArea/GlowVisual
+@onready var glow_visual: Sprite2D = $GlowArea/GlowVisual
 
 func _ready() -> void:
 	super._ready()
@@ -19,10 +19,8 @@ func _physics_process(delta: float) -> void:
 	if not is_instance_valid(glow_area):
 		return
 		
-	# Follow the center of the entity. Since it's a child of the mutation,
-	# and the mutation is a child of the Kaiju, it will naturally follow.
-	# But we'll ensure its local position is 0,0 relative to the mutation.
-	glow_area.position = Vector2.ZERO
+	# Center on the Kaiju's actual body mass (which is offset by -16 on Y from the origin)
+	glow_area.position = Vector2(0, -16)
 
 func _update_radius() -> void:
 	if stats == null or not is_instance_valid(glow_area):
@@ -36,13 +34,21 @@ func _update_radius() -> void:
 	
 	# Try to find a CollisionShape2D or CollisionPolygon2D
 	for child in glow_area.get_children():
-		if child is CollisionShape2D and child.shape is CircleShape2D:
-			child.shape.radius = r
+		if child is CollisionShape2D:
+			# Ensure the shape is unique so scaling it doesn't affect other instances
+			if not child.shape.resource_local_to_scene:
+				child.shape = child.shape.duplicate()
+			if child.shape is CircleShape2D:
+				child.shape.radius = r
 			
 	if is_instance_valid(glow_visual):
-		glow_visual.size = Vector2(r * 2, r * 2)
-		glow_visual.position = Vector2(-r, -r)
-		glow_visual.pivot_offset = Vector2(r, r)
+		if glow_visual.texture:
+			var tex_size = glow_visual.texture.get_size()
+			# Scale the Sprite2D so its width matches the desired diameter (r * 2)
+			var scale_mod = (r * 2.0) / tex_size.x
+			glow_visual.scale = Vector2(scale_mod, scale_mod)
+		# Sprite2D is automatically centered, so we just set position to ZERO relative to glow_area
+		glow_visual.position = Vector2.ZERO
 
 # Called when current_level changes
 func level_up() -> void:

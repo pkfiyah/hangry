@@ -81,3 +81,16 @@ layout_mode = 2
 text = "Climb: Up/Down Near Buildings"
 
 [node name="LevelUpMenu" parent="." instance=ExtResource("2_276te")]
+
+[node name="ActiveMutationsContainer" type="HBoxContainer" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -80.0
+offset_top = -16.0
+offset_right = 80.0
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 1

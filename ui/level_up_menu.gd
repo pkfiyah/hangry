@@ -4,6 +4,7 @@ class_name LevelUpMenu
 signal upgrade_selected(upgrade_data: Dictionary)
 
 @onready var button_container: HBoxContainer = $Panel/VBoxContainer/HBoxContainer
+var upgrade_button_scene = preload("res://ui/upgrade_button.tscn")
 
 # Disconnect old signals so we don't double fire when re-opening
 var current_options: Array[Dictionary] = []
@@ -24,7 +25,7 @@ func display_options(options: Array[Dictionary]) -> void:
 	# Create new buttons for each option
 	for i in range(options.size()):
 		var option = options[i]
-		var btn = Button.new()
+		var btn = upgrade_button_scene.instantiate()
 		btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		
 		# Format text: e.g., "Nuclear Glow (Lv 1)\nDamage: 10 -> 15"
@@ -36,9 +37,31 @@ func display_options(options: Array[Dictionary]) -> void:
 			
 		btn_text += option.description
 		
-		btn.text = btn_text
+		var desc_label = btn.get_node("HBoxContainer/DescriptionLabel")
+		if desc_label:
+			desc_label.text = btn_text
+			
+		var stats: MutationStats = option.get("stats")
+		var bg_rect = btn.get_node("HBoxContainer/IconBackground")
+		if bg_rect:
+			if stats:
+				bg_rect.color = stats.icon_bg_color
+			else:
+				bg_rect.color = Color.WHITE
+				
+		var tex_rect = btn.get_node("HBoxContainer/IconBackground/IconTexture")
+		if tex_rect:
+			if stats and stats.mutation_icon:
+				tex_rect.texture = stats.mutation_icon
+			else:
+				tex_rect.texture = null
 		
-		btn.pressed.connect(_on_button_pressed.bind(option))
+		var actual_button = btn.get_node_or_null("Button")
+		if actual_button:
+			actual_button.pressed.connect(_on_button_pressed.bind(option))
+		else:
+			push_warning("UpgradeButton scene is missing its Button node!")
+			
 		button_container.add_child(btn)
 
 	show()

@@ -1,6 +1,9 @@
 class_name MutationStats extends Resource
 
 @export var mutation_name: String = "Unknown Mutation"
+@export var mutation_icon: Texture2D = null
+@export var icon_bg_color: Color = Color.WHITE
+@export var mutation_description: String = "Default Description"
 ## Array of level data. Index 0 is Level 1, Index 1 is Level 2, etc.
 @export var levels: Array[MutationLevelData] = []
 

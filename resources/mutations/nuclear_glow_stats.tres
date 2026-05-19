@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="MutationStats" load_steps=6 format=3 uid="uid://cya2ba8wxx01i"]
+[gd_resource type="Resource" script_class="MutationStats" load_steps=7 format=3 uid="uid://cya2ba8wxx01i"]
 
 [ext_resource type="Script" uid="uid://cidqm1ddjltxt" path="res://resources/mutations/mutation_level_data.gd" id="1_3aigs"]
+[ext_resource type="Texture2D" uid="uid://c5nvaqodoiqqo" path="res://sprites/placeholders/nuclear_glow_16x16.png" id="2_esi3i"]
 [ext_resource type="Script" uid="uid://du3n250yhoh" path="res://resources/mutations/mutation_stats.gd" id="2_xdpb3"]
 
 [sub_resource type="Resource" id="Resource_3aigs"]
@@ -23,5 +24,7 @@ metadata/_custom_type_script = "uid://cidqm1ddjltxt"
 [resource]
 script = ExtResource("2_xdpb3")
 mutation_name = "Nuclear Glow"
+mutation_icon = ExtResource("2_esi3i")
+icon_bg_color = Color(0.015686275, 0.91764706, 0, 1)
 levels = Array[ExtResource("1_3aigs")]([SubResource("Resource_3aigs"), SubResource("Resource_xdpb3"), SubResource("Resource_esi3i")])
 metadata/_custom_type_script = "uid://du3n250yhoh"
