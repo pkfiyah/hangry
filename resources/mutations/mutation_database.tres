@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="MutationDatabase" load_steps=3 format=3 uid="uid://b4df2j3iqsgjs"]
+
+[ext_resource type="PackedScene" uid="uid://bpsieek6bhkel" path="res://entities/player/mutations/nuclear_glow_mutation.tscn" id="1_rxonu"]
+[ext_resource type="Script" uid="uid://cx5t7jcuq6hau" path="res://resources/mutations/mutation_database.gd" id="1_x5kdq"]
+
+[resource]
+script = ExtResource("1_x5kdq")
+mutation_scenes = Dictionary[String, PackedScene]({
+"NuclearGlow": ExtResource("1_rxonu")
+})

@@ -11,11 +11,17 @@ var current_state = State.NORMAL
 
 @onready var left_ray: RayCast2D = $LeftRay
 @onready var right_ray: RayCast2D = $RightRay
-@onready var attack_area: Area2D = $AttackArea
 @onready var player_area: CollisionShape2D = $CollisionShape2D
 
+# The container node where all active mutations will be added as children
+@onready var mutations_container: Node2D = $Mutations
+
+@export var manual_attack_enabled: bool = true
+
+# Database of all available mutations in the game
+@export var mutation_database: MutationDatabase
+
 var facing_direction: int = 1
-var attack_timer: float = 0.0
 
 var health: int = 100
 var max_health: int = 100
@@ -25,14 +31,17 @@ var state_change_cooldown_timer: float = 0.0
 
 var current_exp: int = 0
 var level: int = 1
-var exp_to_next_level: int = 100
+var exp_to_next_level: int = 10
 
 signal health_changed(new_health)
 signal exp_changed(new_exp)
 signal level_up(new_level)
 
 func _ready():
-	pass
+	# Ensure the UI connects to our signal
+	var ui_menu = get_tree().get_first_node_in_group("level_up_menu")
+	if ui_menu and ui_menu is LevelUpMenu:
+		ui_menu.upgrade_selected.connect(_on_upgrade_selected)
 
 func _change_state(new_state:State): 
 	if state_change_cooldown_timer <= 0.0:
@@ -68,9 +77,82 @@ func add_exp(amount: int):
 		
 		emit_signal("level_up", level)
 		print("Level Up! New Level: ", level)
+		_trigger_level_up_menu()
 		
 	print("Kaiju EXP: ", current_exp)
 	emit_signal("exp_changed", current_exp)
+	
+func _trigger_level_up_menu() -> void:
+	var ui_menu = get_tree().get_first_node_in_group("level_up_menu")
+	if not ui_menu or not ui_menu is LevelUpMenu or not mutation_database:
+		push_warning("LevelUpMenu or MutationDatabase is missing!")
+		return
+		
+	var options = _generate_level_up_options(3)
+	if options.is_empty():
+		return
+		
+	ui_menu.display_options(options)
+
+func _generate_level_up_options(count: int) -> Array[Dictionary]:
+	var available_options: Array[Dictionary] = []
+	
+	# Check existing mutations for upgrades
+	for child in mutations_container.get_children():
+		if child is Mutation and child.stats:
+			if child.current_level < child.stats.get_max_level():
+				var next_lvl = child.current_level + 1
+				var lvl_data = child.stats.get_level_data(next_lvl)
+				available_options.append({
+					"mutation_id": child.name, # Using the node name as a rough ID for existing ones
+					"mutation_name": child.stats.mutation_name,
+					"is_new": false,
+					"next_level": next_lvl,
+					"description": lvl_data.description,
+					"existing_node": child
+				})
+				
+	# Check database for new mutations not yet acquired
+	for m_id in mutation_database.mutation_scenes.keys():
+		var has_mutation = false
+		for child in mutations_container.get_children():
+			# We assume the scene instantiates with the exact m_id or we track it.
+			# For simplicity, we just check if a node with this m_id exists
+			if child.name.to_lower() == str(m_id).to_lower():
+				has_mutation = true
+				break
+				
+		if not has_mutation:
+			var scene: PackedScene = mutation_database.mutation_scenes[m_id]
+			# To get the name/description, we might need to instantiate it temporarily 
+			# or we assume a separate Data structure. For now, instantiate to read stats:
+			var temp_instance = scene.instantiate() as Mutation
+			if temp_instance and temp_instance.stats:
+				var lvl_data = temp_instance.stats.get_level_data(1)
+				available_options.append({
+					"mutation_id": m_id,
+					"mutation_name": temp_instance.stats.mutation_name,
+					"is_new": true,
+					"next_level": 1,
+					"description": lvl_data.description,
+					"scene": scene
+				})
+			temp_instance.free()
+			
+	# Shuffle and pick 'count' options
+	available_options.shuffle()
+	return available_options.slice(0, min(count, available_options.size()))
+
+func _on_upgrade_selected(option_data: Dictionary) -> void:
+	if option_data.is_new:
+		var scene: PackedScene = option_data.scene
+		var new_mutation = scene.instantiate()
+		new_mutation.name = option_data.mutation_id
+		mutations_container.add_child(new_mutation)
+	else:
+		var existing: Mutation = option_data.existing_node
+		if existing:
+			existing.level_up()
 
 func take_damage(amount: int):
 	if invulnerable_timer > 0:
@@ -101,17 +183,8 @@ func process_normal(delta):
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 
-	# Update attack hitbox position based on facing direction
-	attack_area.position.x = facing_direction * 40
-	attack_area.position.y = -50
-
-	# Attack logic
-	if attack_timer > 0:
-		attack_timer -= delta
-		
-	if Input.is_key_pressed(KEY_Z) and attack_timer <= 0:
-		attack_timer = 0.5 # Attack cooldown
-		perform_attack()
+	# Trigger active mutations
+	_trigger_mutations()
 
 	# Check if we should start climbing
 	var vert_direction = Input.get_axis("ui_up", "ui_down")
@@ -127,25 +200,18 @@ func process_normal(delta):
 
 	move_and_slide()
 
-func perform_attack():
-	# Create a brief visual indicator for the attack
-	var slash = ColorRect.new()
-	slash.color = Color.RED
-	slash.size = Vector2(80, 100)
-	slash.position = Vector2(-40, -50)
-	attack_area.add_child(slash)
+func _trigger_mutations() -> void:
+	if not is_instance_valid(mutations_container):
+		return
+		
+	var want_to_manual_attack = manual_attack_enabled and Input.is_key_pressed(KEY_Z)
 	
-	# Animate the slash fading out so we can see it
-	var tween = create_tween()
-	tween.tween_property(slash, "modulate:a", 0.0, 0.2)
-	tween.tween_callback(slash.queue_free)
-
-	# Check what buildings are in the hitbox and damage them
-	var bodies = attack_area.get_overlapping_bodies()
-	for body in bodies:
-		if body.has_method("take_damage"):
-			# Buildings take 25 damage per hit (4 hits to destroy)
-			body.take_damage(25)
+	for mutation in mutations_container.get_children():
+		if mutation is Mutation:
+			# If manual is disabled, mutations fire automatically on cooldown.
+			# If manual is enabled, we only fire if the user presses the key.
+			if not manual_attack_enabled or want_to_manual_attack:
+				mutation.trigger(want_to_manual_attack)
 
 func process_climbing(delta):
 	var wall_direction = 0
@@ -180,15 +246,8 @@ func process_climbing(delta):
 		# Detach by pressing away from the wall
 		_change_state(State.NORMAL)
 		
-	# Attack while climbing (optional, but fun!)
-	if attack_timer > 0:
-		attack_timer -= delta
-	if Input.is_key_pressed(KEY_Z) and attack_timer <= 0:
-		attack_timer = 0.5
-		# Turn to face the wall to attack it
-		facing_direction = wall_direction
-		attack_area.position.x = facing_direction * 40
-		attack_area.position.y = -50
-		perform_attack()
+	# Update facing direction towards the wall for climbing attacks
+	facing_direction = wall_direction
+	_trigger_mutations()
 		
 	move_and_slide()

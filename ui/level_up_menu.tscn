@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cehsr73xcdgtt" path="res://ui/level_up_menu.gd" id="1_dubad"]
 
-[node name="LevelUpMenu" type="Control"]
+[node name="LevelUpMenu" type="Control" groups=["level_up_menu"]]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

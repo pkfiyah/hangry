@@ -52,9 +52,6 @@ func _on_level_up(new_level: int):
 	if kaiju:
 		exp_bar.max_value = kaiju.exp_to_next_level
 		exp_bar.value = 0 # Visual reset
-		
-	if is_instance_valid(level_up_menu):
-		level_up_menu.display_options()
 
 func _on_controls_button_pressed():
 	toggle_pause()
